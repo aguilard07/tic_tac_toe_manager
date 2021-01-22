@@ -5,17 +5,17 @@ import 'package:tic_tac_toe_manager/src/tic_tac_toe_utils.dart';
 ///state of the board.
 
 class TicTacToeManager {
-  Map<int, Mark> _boardState; //Board's current state.
+  Map<int, String> _boardState; //Board's current state.
 
   bool _isTied; //Tied state
   bool _isWon;
   bool _lastPlayedValid; //Checks if the last play is valid.
-  Mark _winnerPlayer; //Winner state
+  String _winnerPlayer; //Winner state
 
   List<int> _winnerLine;
 
   TicTacToeManager() {
-    _boardState = <int, Mark>{};
+    _boardState = <int, String>{};
     _isTied = false;
   }
 
@@ -25,7 +25,7 @@ class TicTacToeManager {
     print(_boardState);
   }
 
-  void update(Mark player, int index) {
+  void update(String player, int index) {
     _lastPlayedValid = false;
     /*
       {
@@ -50,7 +50,7 @@ class TicTacToeManager {
     //Si no hay ganador, ni empate, devuelve el siguiente jugador.
   }
 
-  void _calculateWinner(Mark player) {
+  void _calculateWinner(String player) {
     // ignore: omit_local_variable_types
     List<int> playerMarks = [];
 
@@ -88,7 +88,7 @@ class TicTacToeManager {
   
     Retorna true si la jugada es válida, false caso contrario
   */
-  bool _updateBoard(Mark player, int index) {
+  bool _updateBoard(String player, int index) {
     if (_boardState.containsKey(index)) {
       return false;
     }
