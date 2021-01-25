@@ -1,4 +1,8 @@
 class Minmax {
+  bool isMovesLeft(Map<int, String> boardState) {
+    return (boardState.length < 10);
+  }
+
   int calculateFitness(Map<int, String> boardState, String currentPlayer,
       List<List<int>> winnerLines) {
     var playerMarks = [];
@@ -11,6 +15,7 @@ class Minmax {
     for (var line in winnerLines) {
       // ignore: omit_local_variable_types
       bool isWon = line.every((element) => playerMarks.contains(element));
+
       //Si hay ganador.
       if (isWon) {
         if (currentPlayer == 'X') {
