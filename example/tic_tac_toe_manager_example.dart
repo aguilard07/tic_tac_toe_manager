@@ -20,12 +20,11 @@ void main() {
     stdout.writeln('Please introduce the index where you want to play:');
 
     //Reading the user input (next play).
+
     try {
-      int index = int.parse(stdin
+      var index = int.parse(stdin
           .readLineSync()!); //Reads the user input and validates that is not null and an int value.
       gameData = ticTacToeManager.update(currentPlayer, index, false);
-
-      print(gameData);
 
       isWon = gameData['isWon'];
       isTied = gameData['isTied'];

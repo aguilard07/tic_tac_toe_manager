@@ -13,7 +13,7 @@ class TicTacToeManager {
   String _nextPlayer = 'X';
   List<int> _winnerLine = [];
 
-  Map get getBoardState => _boardState;
+  Map<int, String> get getBoardState => _boardState;
 
   void printBoardState() {
     print(

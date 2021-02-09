@@ -1,24 +1,28 @@
 import 'dart:math';
 
 class Minmax {
-  static printBoardState(Map<int, String> boardState) {
+  static void printBoardState(Map<int, String> boardState) {
     print(
-        '|${boardState[0] ?? 'A'}     ${boardState[1] ?? 'A'}     ${boardState[2] ?? 'A'}|');
+        '|${boardState[0] ?? '_'}     ${boardState[1] ?? '_'}     ${boardState[2] ?? '_'}|');
     print(
-        '|${boardState[3] ?? 'A'}     ${boardState[4] ?? 'A'}     ${boardState[5] ?? 'A'}|');
+        '|${boardState[3] ?? '_'}     ${boardState[4] ?? '_'}     ${boardState[5] ?? '_'}|');
     print(
-        '|${boardState[6] ?? 'A'}     ${boardState[7] ?? 'A'}     ${boardState[8] ?? 'A'}|');
+        '|${boardState[6] ?? '_'}     ${boardState[7] ?? '_'}     ${boardState[8] ?? '_'}|');
   }
 
   static int minmax(Map<int, String> boardState, int depth,
       String currentPlayer, List<List<int>> winnerLines) {
     var score = calculateFitness(boardState, winnerLines);
+
     var best = 0;
     if (score == 10 || score == -10) {
       return score;
     }
 
-    if (!isMovesLeft(boardState)) return 0;
+    if (!isMovesLeft(boardState)) {
+      score = 0;
+      return score;
+    }
 
     //print('Player: $currentPlayer');
     if (currentPlayer == 'X') {
@@ -30,25 +34,30 @@ class Minmax {
     for (var i = 0; i < 9; i++) {
       if (!boardState.containsKey(i)) {
         boardState.putIfAbsent(i, () => currentPlayer);
+        print('Current Player: $currentPlayer');
         switch (currentPlayer) {
           case 'X':
-            best = max(best, minmax(boardState, depth + 1, 'O', winnerLines)) -
-                depth;
+            var value = minmax(boardState, depth + 1, 'O', winnerLines) - depth;
+            best = max(best, value);
+            print('Value: $value, best: $best');
             break;
           case 'O':
-            best = min(best, minmax(boardState, depth + 1, 'X', winnerLines)) +
-                depth;
+            var value = minmax(boardState, depth + 1, 'X', winnerLines) + depth;
+
+            best = min(best, value);
+            print('Value: $value, best: $best');
             break;
           default:
         }
         boardState.remove(i);
       }
     }
+    print('best: $best');
     return best;
   }
 
   static bool isMovesLeft(Map<int, String> boardState) {
-    return (boardState.length < 10);
+    return !(boardState.length == 9);
   }
 
   static int calculateFitness(
@@ -85,7 +94,7 @@ class Minmax {
 
   static int findBestMove(Map<int, String> boardState, String currentPlayer,
       List<List<int>> winnerLines) {
-    var bestVal = 1000;
+    var bestVal;
     var bestMove = -1;
     var nextPlayer;
 
@@ -100,7 +109,7 @@ class Minmax {
       print('Testing move = $move');
 
       if (!boardState.containsKey(move)) {
-        // print('move $move is possible');
+        print('move $move is possible');
         boardState.putIfAbsent(move, () => currentPlayer);
         printBoardState(boardState);
         var moveVal = minmax(boardState, 0, nextPlayer, winnerLines);
@@ -119,11 +128,12 @@ class Minmax {
         }
 
         boardState.remove(move);
-        print('----------------------------------------------------');
-      } else {
+        // print('----------------------------------------------------');
+      }
+      /*else {
         print('move $move is NOT possible');
         print('----------------------------------------------------');
-      }
+      }*/
     }
     return bestMove;
   }
